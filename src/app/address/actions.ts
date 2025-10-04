@@ -1,6 +1,8 @@
 "use server";
 import { getAddress } from "jposta";
 
+const POSTCODE_JP_API_KEY = process.env.NEXT_PUBLIC_POSTCODE_JP_API_KEY || "";
+
 export type Address = {
   area: string;
   city: string;
@@ -26,5 +28,39 @@ export const getAddressJposta = async (
     area: address.area || "",
     city: address.city,
     pref: address.pref,
+  };
+};
+
+// Fetch address using Postcode-JP API
+// https://postcode-jp.com/
+export const getAddressPostcodeJP = async (postalCode: string) => {
+  if (!POSTCODE_JP_API_KEY) {
+    throw new Error("PostcodeJP API key is not set");
+  }
+
+  const res = await fetch(
+    `https://apis.postcode-jp.com/api/v6/postcodes/${convertFullWidthToHalfWidth(postalCode)}`,
+    {
+      method: "GET",
+      headers: {
+        apikey: POSTCODE_JP_API_KEY,
+      },
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  const data = await res.json();
+
+  if (data.length === 0) {
+    throw new Error("No address found for this postal code");
+  }
+
+  return {
+    area: data[0].town || "",
+    city: data[0].city,
+    pref: data[0].pref,
   };
 };
