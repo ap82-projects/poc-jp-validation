@@ -1,8 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+The purpose of this app is to demonstrate a few methods of doing the following
+
+- Deriving a Japanese address from the postal code
+- Validatinga Japanese phone number
+
 ## Getting Started
 
-First, run the development server:
+First, copy the `env.template` file in the root of the repo to `.env` and insert your API key for PostcodeJP. You will need to first create an account at (https://postcode-jp.com)[https://postcode-jp.com].
+
+Second, run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +21,47 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the page.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+From there you can navigate to either the address validation or postal code demo pages. Note that on both demo pages, the input boxes will only allow numeric values to be input in either half or full width characters. Attempts to input any other characters will not show up in the input. This is intentional
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+### The following services and packages were used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### [Poscode-JP - https://postcode-jp.com](https://postcode-jp.com)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+A well established and popular service for converting postal codes to addresses via an API. They have a free and paid plan
 
-## Deploy on Vercel
+- Free
+  - 384 requests per day and a request rate of 1 request per second
+- 1,980 JPY per month
+  - Unlimited requests per day and a request rate of 3 requests per second
+- 3,400 JPY per month
+  - Unlimeted requests per day and an ulimited request rate
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### [jposta - https://github.com/nickichi/jposta](https://github.com/nickichi/jposta)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+A seemingly popular pagage for converting postal codes to addresses. It contains up to data from the Japan Post and seems to be actively maintained. Since all of the postal data is in the package, it could add quite a bit of size to a client side application, so it might be better to implement in the backend. However, there is no telling how long it will be maintained or how reliable the package will be in the longterm.
+
+#### [libphonenumber-js - https://github.com/catamphetamine/libphonenumber-js](https://github.com/catamphetamine/libphonenumber-js)
+
+A very popular library for validating phone numbers
+
+#### [awesome-phonenumber - https://github.com/grantila/awesome-phonenumber](https://github.com/grantila/awesome-phonenumber)
+
+Another popular package for validating phone number, though not as widely used as `libphonenumber-js`
+
+#### [a-better-phone-regex - https://github.com/sakatam/a-better-jp-phone-regex](https://github.com/sakatam/a-better-jp-phone-regex)
+
+A regex for validating Japanese phone numbers. It's difficult to say how widely used it is, but there does seem to be quite a few recommendations for it on Japanese sites. Seems to be less prone to false positive validations than `libphonenumber-js` and `awesome-phonenumber`, but more testing would be necessary to validate that.
+
+### Services and packages that were not used
+
+#### [Japan Post API - https://lp-api.da.pf.japanpost.jp/](https://lp-api.da.pf.japanpost.jp/)
+
+A seemingly free to use API run by the Japan post. However, there do seem to be rate limits and access to it is part of registering for a larger business service. May be useful if the other services offered are needed.
+
+#### [libphonenumber - https://github.com/google/libphonenumber](https://github.com/google/libphonenumber)
+
+A package maintained by Google for validating phone numbers. While it has many more features than the above used packages, those features come at a cost of size and is not written natively in Javascript.
