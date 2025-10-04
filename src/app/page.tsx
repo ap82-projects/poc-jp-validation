@@ -16,6 +16,14 @@ export default function Home() {
               Address from postal code
             </button>
           </Link>
+          <Link href="/phone-number">
+            <button
+              className="px-6 py-3 bg-black text-white rounded-lg text-lg sm:text-xl font-medium cursor-pointer hover:bg-gray-800 active:bg-gray-900 transition text-center"
+              type="button"
+            >
+              Phone number verification
+            </button>
+          </Link>
         </div>
       </main>
     </div>
