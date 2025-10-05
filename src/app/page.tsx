@@ -24,6 +24,14 @@ export default function Home() {
               Phone number verification
             </button>
           </Link>
+          <Link href="/address-validator">
+            <button
+              className="px-6 py-3 bg-black text-white rounded-lg text-lg sm:text-xl font-medium cursor-pointer hover:bg-gray-800 active:bg-gray-900 transition text-center"
+              type="button"
+            >
+              Address verification
+            </button>
+          </Link>
         </div>
       </main>
     </div>
