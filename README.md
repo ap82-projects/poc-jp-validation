@@ -1,9 +1,11 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 The purpose of this app is to demonstrate a few methods of doing the following
 
 - Deriving a Japanese address from the postal code
-- Validatinga Japanese phone number
+  - One method uses a locally installed package while the other uses a third-party API
+- Validating a Japanese phone number
+  - Two methods use locally installed packages while the third uses a regex
+- Validating a Japanese address
+  - Only one method using a third party API
 
 ## Getting Started
 
@@ -23,7 +25,7 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the page.
 
-From there you can navigate to either the address validation or postal code demo pages. Note that on both demo pages, the input boxes will only allow numeric values to be input in either half or full width characters. Attempts to input any other characters will not show up in the input. This is intentional
+From there you can navigate to either the phone number validation, address from postal code, or address validation demo pages. Note that on the postal code and phone number demo pages, the input boxes will only allow numeric values to be input in either half or full width characters. Attempts to input any other characters will not show up in the input. This is intentional
 
 ## Learn More
 
@@ -31,7 +33,7 @@ From there you can navigate to either the address validation or postal code demo
 
 #### [Poscode-JP - https://postcode-jp.com](https://postcode-jp.com)
 
-A well established and popular service for converting postal codes to addresses via an API. They have a free and paid plan
+A well established and popular service for converting postal codes to addresses via an API. There is also an address analysis API for validating addresses, though it is currently in a preview stage. They have both free and paid plans.
 
 - Free
   - 384 requests per day and a request rate of 1 request per second
@@ -60,8 +62,12 @@ A regex for validating Japanese phone numbers. It's difficult to say how widely 
 
 #### [Japan Post API - https://lp-api.da.pf.japanpost.jp/](https://lp-api.da.pf.japanpost.jp/)
 
-A seemingly free to use API run by the Japan post. However, there do seem to be rate limits and access to it is part of registering for a larger business service. May be useful if the other services offered are needed.
+A seemingly free to use API run by the Japan post that can be used to derive addresses from postal codes. However, there do seem to be rate limits and access to it is part of registering for a larger business service. May be useful if the other services offered are needed.
 
 #### [libphonenumber - https://github.com/google/libphonenumber](https://github.com/google/libphonenumber)
 
 A package maintained by Google for validating phone numbers. While it has many more features than the above used packages, those features come at a cost of size and is not written natively in Javascript.
+
+#### [Google Maps Platform - https://developers.google.com/maps](https://developers.google.com/maps)
+
+This seems like it would be a more mature and feature rich address validator that would also be able to display a map based on the inputted address as well as offering an autocomplete feature. Was unable to test yet.
