@@ -1,6 +1,7 @@
 "use server";
 
 const POSTCODE_JP_API_KEY = process.env.NEXT_PUBLIC_POSTCODE_JP_API_KEY || "";
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
 
 export type Validity = "INVALID" | "VALID" | "CONFIRMATION_REQUIRED";
 
@@ -36,7 +37,7 @@ export const validateAddressPostcodeJP = async (
 
   // Example acceptance logic
   const result = ((): Validity => {
-  // If score is greater than 0.7, consider it valid
+    // If score is greater than 0.7, consider it valid
     const hasAllIndividualPassed = Object.values(data.meta.score_detail).every(
       (score) => Number(score) > 0.7,
     );
@@ -57,4 +58,52 @@ export const validateAddressPostcodeJP = async (
   // Individual scores can befound on the data.meta.score_detail object
   return result;
 };
+
+export const validateAddressGoogleMaps = async (
+  addressLines: string[],
+): Promise<Validity> => {
+  if (!GOOGLE_MAPS_API_KEY) {
+    throw new Error("Google Maps API key is not set");
+  }
+
+  const res = await fetch(
+    `https://addressvalidation.googleapis.com/v1:validateAddress?key=${GOOGLE_MAPS_API_KEY}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        address: {
+          regionCode: "JP",
+          addressLines: addressLines.map((line) =>
+            convertFullWidthNumbersToHalfWidth(line).replace(/－/g, "-"),
+          ),
+        },
+      }),
+    },
+  );
+
+  if (!res.ok) {
+    throw new Error("Something went wrong");
+  }
+
+  const data = await res.json();
+
+  if (!data?.result?.verdict.possibleNextAction) {
+    throw new Error("Invalid response from Google Maps API");
+  }
+
+  const result = ((): Validity => {
+    switch (data.result.verdict.possibleNextAction) {
+      case "ACCEPT":
+        return "VALID";
+      case "CONFIRM":
+        return "CONFIRMATION_REQUIRED";
+      default:
+        return "INVALID";
+    }
+  })();
+
+  return result;
 };
