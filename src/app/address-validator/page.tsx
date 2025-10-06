@@ -9,18 +9,12 @@ import {
 
 const AddressValidationDemo = () => {
   const [address, setAddress] = useState("");
-  const [isValidPostcodeJP, setIsValidPostcodeJP] = useState<boolean | null>(
-    null,
-  );
   const [resultPostcodeJP, setResultPostcodeJP] = useState<Validity | null>(
     null,
   );
   const [isErrorPostcodeJP, setIsErrorPostcodeJP] = useState<boolean>(false);
 
   const [resultGoogleMaps, setResultGoogleMaps] = useState<Validity | null>(
-    null,
-  );
-  const [isValidGoogleMaps, setIsValidGoogleMaps] = useState<boolean | null>(
     null,
   );
   const [isErrorGoogleMaps, setIsErrorGoogleMaps] = useState<boolean>(false);
@@ -50,20 +44,20 @@ const AddressValidationDemo = () => {
 
   const resetAddress = () => {
     setAddress("");
-    setIsValidPostcodeJP(null);
-    setIsValidGoogleMaps(null);
+    setIsErrorGoogleMaps(false);
+    setResultGoogleMaps(null);
+    setIsErrorPostcodeJP(false);
+    setResultPostcodeJP(null);
   };
 
   const validationMethods = [
     {
       isError: isErrorPostcodeJP,
-      isValid: isValidPostcodeJP,
       label: "PostcodeJP",
       result: resultPostcodeJP,
     },
     {
       isError: isErrorGoogleMaps,
-      isValid: isValidGoogleMaps,
       label: "Google Maps",
       result: resultGoogleMaps,
     },

@@ -50,7 +50,7 @@ const AddressDemo = () => {
         </button>
       </Link>
       <div className="font-sans flex flex-col gap-8 items-center justify-items-center min-h-screen p-8 pb-20 sm:p-20">
-        <h1>Address Verification Demo</h1>
+        <h1>Address from Postal Code Demo</h1>
         <div className="flex flex row gap-4 items-center">
           <input
             className="border border-gray-300 rounded px-4 py-2 w-full max-w-sm"
