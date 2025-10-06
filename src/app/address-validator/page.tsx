@@ -1,11 +1,29 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
-import { validateAddressPostcodeJP } from "./actions";
+import { FC, useState } from "react";
+import {
+  validateAddressGoogleMaps,
+  validateAddressPostcodeJP,
+  Validity,
+} from "./actions";
 
 const AddressValidationDemo = () => {
   const [address, setAddress] = useState("");
-  const [isValid, setIsValid] = useState<boolean | null>(null);
+  const [isValidPostcodeJP, setIsValidPostcodeJP] = useState<boolean | null>(
+    null,
+  );
+  const [resultPostcodeJP, setResultPostcodeJP] = useState<Validity | null>(
+    null,
+  );
+  const [isErrorPostcodeJP, setIsErrorPostcodeJP] = useState<boolean>(false);
+
+  const [resultGoogleMaps, setResultGoogleMaps] = useState<Validity | null>(
+    null,
+  );
+  const [isValidGoogleMaps, setIsValidGoogleMaps] = useState<boolean | null>(
+    null,
+  );
+  const [isErrorGoogleMaps, setIsErrorGoogleMaps] = useState<boolean>(false);
 
   const onInputAddress = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -14,17 +32,42 @@ const AddressValidationDemo = () => {
 
   const validate = async () => {
     try {
-      await validateAddressPostcodeJP(address);
-      setIsValid(true);
+      setResultPostcodeJP(await validateAddressPostcodeJP([address]));
+      setIsErrorPostcodeJP(false);
     } catch (error) {
-      setIsValid(false);
+      setIsErrorPostcodeJP(true);
+      setResultPostcodeJP(null);
+    }
+
+    try {
+      setResultGoogleMaps(await validateAddressGoogleMaps([address]));
+      setIsErrorGoogleMaps(false);
+    } catch (error) {
+      setIsErrorGoogleMaps(true);
+      setResultGoogleMaps(null);
     }
   };
 
   const resetAddress = () => {
     setAddress("");
-    setIsValid(null);
+    setIsValidPostcodeJP(null);
+    setIsValidGoogleMaps(null);
   };
+
+  const validationMethods = [
+    {
+      isError: isErrorPostcodeJP,
+      isValid: isValidPostcodeJP,
+      label: "PostcodeJP",
+      result: resultPostcodeJP,
+    },
+    {
+      isError: isErrorGoogleMaps,
+      isValid: isValidGoogleMaps,
+      label: "Google Maps",
+      result: resultGoogleMaps,
+    },
+  ];
 
   return (
     <div>
@@ -60,16 +103,42 @@ const AddressValidationDemo = () => {
         >
           Validate
         </button>
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-row gap-4">
-            {isValid === true && (
-              <p className="text-green-500">Valid address</p>
-            )}
-            {isValid === false && (
-              <p className="text-red-500">Invalid address</p>
-            )}
-          </div>
+        <div className="flex flex-row gap-4">
+          {validationMethods.map(({ isError, label, result }) => (
+            <AddressValidation
+              isError={isError}
+              key={label}
+              label={label}
+              result={result}
+            />
+          ))}
         </div>
+      </div>
+    </div>
+  );
+};
+
+interface AddressValidationProps {
+  isError: boolean;
+  label: string;
+  result: Validity | null;
+}
+
+const AddressValidation: FC<AddressValidationProps> = ({
+  isError,
+  label,
+  result,
+}) => {
+  return (
+    <div className="flex flex-col gap-4">
+      {(result || isError) && (
+        <h2 className="text-center">{`Using ${label}`}</h2>
+      )}
+      <div className="flex flex-row gap-4">
+        {result && <p>{result}</p>}
+        {/* {isValid === true && <p className="text-green-500">Valid address</p>}
+        {isValid === false && <p className="text-red-500">Invalid address</p>} */}
+        {isError && <p className="text-red-500">Error validating address</p>}
       </div>
     </div>
   );

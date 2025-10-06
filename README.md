@@ -42,6 +42,10 @@ A well established and popular service for converting postal codes to addresses 
 - 3,400 JPY per month
   - Unlimeted requests per day and an ulimited request rate
 
+#### [Google Maps Platform - https://developers.google.com/maps](https://developers.google.com/maps)
+
+This seems like it would be a more mature and feature rich address validator that would also be able to display a map based on the inputted address as well as offering an autocomplete feature. Currently have tested using it to validate addresses, though it works best when the numbers and hyphens in the address (chome-ban-go section) are in half-width characters.
+
 #### [jposta - https://github.com/nickichi/jposta](https://github.com/nickichi/jposta)
 
 A seemingly popular pagage for converting postal codes to addresses. It contains up to data from the Japan Post and seems to be actively maintained. Since all of the postal data is in the package, it could add quite a bit of size to a client side application, so it might be better to implement in the backend. However, there is no telling how long it will be maintained or how reliable the package will be in the longterm.
@@ -67,7 +71,3 @@ A seemingly free to use API run by the Japan post that can be used to derive add
 #### [libphonenumber - https://github.com/google/libphonenumber](https://github.com/google/libphonenumber)
 
 A package maintained by Google for validating phone numbers. While it has many more features than the above used packages, those features come at a cost of size and is not written natively in Javascript.
-
-#### [Google Maps Platform - https://developers.google.com/maps](https://developers.google.com/maps)
-
-This seems like it would be a more mature and feature rich address validator that would also be able to display a map based on the inputted address as well as offering an autocomplete feature. Was unable to test yet.
